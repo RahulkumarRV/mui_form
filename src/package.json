@@ -1,0 +1,19 @@
+{
+  "dependencies": {
+    "@emotion/react": "11.10.6",
+    "@emotion/styled": "11.10.6",
+    "@material-ui/core": "latest",
+    "@material-ui/icons": "latest",
+    "@mui/icons-material": "5.11.16",
+    "@mui/material": "5.12.1",
+    "@mui/styles": "5.11.13",
+    "prop-types": "latest",
+    "react": "latest",
+    "react-dom": "latest"
+  },
+  "description": "https://github.com/mui-org/material-ui/blob/v4.x/docs/src/pages/components/tables/CollapsibleTable.js",
+  "devDependencies": {
+    "react-scripts": "latest"
+  },
+  "title": "Material demo"
+}
