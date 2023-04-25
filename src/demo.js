@@ -1,179 +1,204 @@
-import React, { useState } from "react";
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  Icon,
-  TableRow,
   Paper,
-  FormControl,
+  Box,
+  ButtonBase,
+  Typography,
   Select,
   MenuItem,
-  Box
 } from "@mui/material";
-import NavigateNextIcon from "@mui/icons-material/NavigateNext";
-import CircleButton from "./CircleButton";
-import DoubleArrowIcon from "@mui/icons-material/DoubleArrow";
-import SearchBar from "./searchBar.js";
+import { makeStyles } from "@material-ui/core/styles";
+import TextField from "@mui/material/TextField";
+import FileCopyIcon from "@material-ui/icons/FileCopy";
+import { useRef, useState } from "react";
+import Editor from "./Editor";
 
-const CustomSizeTable = ({ data }) => {
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
-  const [maxPage, setMaxPage] = useState(0);
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
+const useStyles = makeStyles({
+  main_container: {
+    padding: "20px",
+  },
+  row: {
+    display: "flex",
+    flexDirection: "row",
+  },
+  inputGroup: {
+    display: "flex",
+    flexDirection: "column",
+    gap: "5px",
+  },
+  courseInput: {
+    height: "40px",
+  },
+  descInput: {
+    height: "40px",
+  },
+  upload_container: {
+    width: "150px",
+    height: "150px",
+    border: "1px solid lightgrey",
+  },
+});
+
+function Demo() {
+  const classes = useStyles();
+  const fileInputRef = useRef(null);
+  const [selectedFile, setSelectedFile] = useState(null);
+
+  const handleFileInputChange = (event) => {
+    const file = event.target.files[0];
+    setSelectedFile(URL.createObjectURL(file));
   };
 
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
-
-  const CustomRowsPerPage = () => {
-    return (
-      <FormControl variant="outlined">
-        <Select
-          value={rowsPerPage}
-          onChange={handleChangeRowsPerPage}
-          inputProps={{ "aria-label": "rows per page" }}
-          style={{
-            width: "max-content",
-            textAlign: "left",
-            height: "30px",
-            paddingRight: "10px"
-          }}
-        >
-          <MenuItem value={5}>5</MenuItem>
-          <MenuItem value={10}>10</MenuItem>
-          <MenuItem value={25}>25</MenuItem>
-          <MenuItem value={50}>50</MenuItem>
-          <MenuItem value={100}>100</MenuItem>
-        </Select>
-      </FormControl>
-    );
-  };
-  // setMaxPage(Math.ceil(data.lenght / rowsPerPage));
+  const options = ["course 1", "course 2", "course 3"];
 
   return (
-    <>
-      <SearchBar />
-      <TableContainer component={Paper}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Course Name</TableCell>
-              <TableCell>Course Type</TableCell>
-              <TableCell>Duration</TableCell>
-              <TableCell>Students Enrolled</TableCell>
-              <TableCell>Instructor Assigned</TableCell>
-              <TableCell>Approval Status</TableCell>
-              <TableCell>Course Status</TableCell>
-              <TableCell>Actions</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {(rowsPerPage > 0
-              ? data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              : data
-            ).map((row) => (
-              <TableRow key={row.id}>
-                <TableCell>{row.name}</TableCell>
-                <TableCell>{row.type}</TableCell>
-                <TableCell>{row.duration}</TableCell>
-                <TableCell>{row.enrolled}</TableCell>
-                <TableCell>{row.instructor}</TableCell>
-                <TableCell>{row.approval}</TableCell>
-                <TableCell>{row.status}</TableCell>
-                <TableCell>Actions</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+    <Paper className={classes.main_container}>
       <Box
         sx={{
           display: "flex",
-          justifyContent: "flex-end",
-          alignItems: "center",
-          mb: 2,
-          gap: "10px",
-          marginTop: "20px",
-          height: "40px"
+          gap: "30px",
         }}
       >
-        <div>Rows per page:</div>
-        <CustomRowsPerPage />
-        <CircleButton
-          children={<DoubleArrowIcon />}
-          style={{
-            borderRadius: "50%",
-            padding: 2,
-            backgroundColor: "#bdbebf",
-            color: "white",
-            height: "100%",
-            width: "40px",
-            transform: "rotate(180deg)"
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "5px",
+            flex: 2,
           }}
-          onClick={() => {
-            if (page > 1) setPage(page - 2);
+        >
+          <label>Course Name</label>
+          <TextField
+            placeholder="Enter Course Name"
+            InputProps={{ classes: { root: classes.courseInput } }}
+          />
+        </Box>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "5px",
+            flex: 3.5,
           }}
-          disable={page > 1 ? false : true}
-        />
-        <CircleButton
-          children={<NavigateNextIcon />}
-          style={{
-            borderRadius: "50%",
-            padding: 2,
-            backgroundColor: "#bdbebf",
-            color: "white",
-            height: "100%",
-            width: "40px",
-            transform: "rotate(180deg)"
-          }}
-          onClick={() => {
-            if (page > 0) setPage(page - 1);
-          }}
-          disable={page > 0 ? false : true}
-        />
-        <p>{`showing ${page * rowsPerPage} to ${(page + 1) * rowsPerPage}`}</p>
-        <CircleButton
-          children={<NavigateNextIcon />}
-          style={{
-            borderRadius: "50%",
-            padding: 2,
-            backgroundColor: "#bdbebf",
-            color: "white",
-            height: "100%",
-            width: "40px"
-          }}
-          onClick={() => {
-            if (page < Math.ceil(data.length / rowsPerPage)) setPage(page + 1);
-          }}
-          disable={page < Math.ceil(data.length / rowsPerPage) ? false : true}
-        />
-        <CircleButton
-          children={<DoubleArrowIcon />}
-          style={{
-            borderRadius: "50%",
-            padding: 2,
-            backgroundColor: "#bdbebf",
-            color: "white",
-            height: "100%",
-            width: "40px"
-          }}
-          onClick={() => {
-            if (page < Math.ceil(data.length / rowsPerPage) - 1)
-              setPage(page + 2);
-          }}
-          disable={
-            page < Math.ceil(data.length / rowsPerPage) - 1 ? false : true
-          }
-        />
+        >
+          <label>Description</label>
+          <TextField
+            placeholder="Enter Description"
+            InputProps={{ classes: { root: classes.descInput } }}
+          />
+        </Box>
       </Box>
-    </>
-  );
-};
 
-export default CustomSizeTable;
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          gap: "5px",
+          marginTop: "20px",
+        }}
+      >
+        <input
+          ref={fileInputRef}
+          type="file"
+          id="file-select"
+          style={{
+            display: "none",
+          }}
+          onChange={handleFileInputChange}
+        />
+        <label htmlFor="file-select">Upload Image</label>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            gap: "20px",
+          }}
+        >
+          {!selectedFile ? (
+            <ButtonBase
+              htmlFor="file-select"
+              sx={{
+                width: "150px",
+                height: "150px",
+                border: "1px solid lightgrey",
+                borderRadius: "10px",
+                display: "flex",
+                flexDirection: "column",
+              }}
+              onClick={() => fileInputRef.current.click()}
+            >
+              <Typography variant="body2">
+                Upload file from <br /> local
+              </Typography>
+              <p style={{ color: "lightgrey" }}>Or</p>
+              <Typography variant="body2">
+                Select file from <br /> Server
+              </Typography>
+            </ButtonBase>
+          ) : (
+            <Box
+              sx={{
+                width: "150px",
+                height: "150px",
+                border: "1px solid lightgrey",
+                borderRadius: "10px",
+                display: "flex",
+                flexDirection: "column",
+              }}
+            >
+              <img
+                style={{
+                  width: "100%",
+                  height: "100%",
+                }}
+                src={selectedFile}
+                alt={"image"}
+              />
+            </Box>
+          )}
+          {selectedFile && (
+            <Typography
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+                gap: "10px",
+                color: "blue",
+              }}
+            >
+              <FileCopyIcon /> {selectedFile.name}
+            </Typography>
+          )}
+        </Box>
+      </Box>
+
+      <Box className={classes.row} sx={{ marginTop: "20px" }}>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "5px",
+          }}
+        >
+          <label>Course</label>
+          <Select
+            placeholder="Select"
+            sx={{
+              height: "40px",
+            }}
+            defaultValue="Select"
+          >
+            {options.map((option) => (
+              <MenuItem key={option} value={option}>
+                {option}
+              </MenuItem>
+            ))}
+          </Select>
+        </Box>
+      </Box>
+      <Box>
+        <Typography>Skills you'll learn</Typography>
+      </Box>
+    </Paper>
+  );
+}
+export default Demo;

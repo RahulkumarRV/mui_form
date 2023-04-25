@@ -7,6 +7,7 @@
     "@mui/icons-material": "5.11.16",
     "@mui/material": "5.12.1",
     "@mui/styles": "5.11.13",
+    "draft-js": "^0.11.7",
     "prop-types": "latest",
     "react": "latest",
     "react-dom": "latest"
@@ -23,5 +24,17 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }
